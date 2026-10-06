@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zendesk Overview</title>
+  <meta name="description" content="Interactive walkthroughs and demos of Zendesk, including the Resolution Learning Loop and Zendesk for employee service.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#F2F5F4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#022A30" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://joekit-zd.github.io/ZendeskOverview/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Zendesk Overview">
+  <meta property="og:description" content="Interactive walkthroughs and demos of Zendesk.">
+  <meta property="og:url" content="https://joekit-zd.github.io/ZendeskOverview/">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2303363D'/%3E%3Ccircle cx='16' cy='16' r='8.5' fill='none' stroke='%23E6EEEC' stroke-opacity='.55' stroke-width='2.5'/%3E%3Ccircle cx='22' cy='10' r='3' fill='%23FFC24B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --paper: #F2F5F4;        /* Mist */
+      --ink: #03363D;          /* Kale */
+      --ink-soft: #33545A;     /* Kale soft */
+      --line: #C9D6D3;         /* Lichen */
+      --tile: #03363D;         /* Slide tile */
+      --tile-edge: transparent;
+      --on-tile: #E6EEEC;
+      --on-tile-soft: rgba(230, 238, 236, 0.5);
+      --signal: #FFC24B;       /* Amber: the moment something resolves or learns */
+      --btn: #03363D;
+      --btn-ink: #F2F5F4;
+      --btn-hover: #0A4952;
+      --focus: #03363D;
+      --font: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #022A30;
+        --ink: #E6EEEC;
+        --ink-soft: #A9BEBB;
+        --line: #2A5B62;
+        --tile: #053A41;
+        --tile-edge: rgba(230, 238, 236, 0.1);
+        --btn: #E6EEEC;
+        --btn-ink: #03363D;
+        --btn-hover: #FFFFFF;
+        --focus: #E6EEEC;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection { background: var(--signal); color: #03363D; }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Page */
+
+    .page {
+      max-width: 71rem;
+      margin-inline: auto;
+      padding:
+        clamp(3rem, 2rem + 6vh, 6.5rem)
+        clamp(1.25rem, 4vw, 3.5rem)
+        clamp(4rem, 3rem + 6vh, 6.5rem);
+    }
+
+    .intro { margin-bottom: clamp(2.75rem, 2rem + 4vw, 5rem); }
+
+    .intro h1 {
+      margin: 0;
+      font-size: clamp(2.75rem, 1.75rem + 4.2vw, 5rem);
+      font-weight: 640;
+      font-stretch: 116%;
+      letter-spacing: -0.03em;
+      line-height: 0.96;
+      text-wrap: balance;
+    }
+
+    .lede {
+      margin: clamp(1rem, 0.8rem + 0.8vw, 1.5rem) 0 0;
+      max-width: 34ch;
+      color: var(--ink-soft);
+      font-size: clamp(1.125rem, 1.05rem + 0.4vw, 1.3125rem);
+      line-height: 1.5;
+      text-wrap: pretty;
+    }
+
+    @media (min-width: 48rem) {
+      .lede { max-width: none; }
+      .lede span { display: block; }
+    }
+
+    /* Library */
+
+    .library {
+      display: grid;
+      gap: clamp(3rem, 2rem + 4vw, 5rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .entry {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+      gap: clamp(1.5rem, 0.5rem + 3.5vw, 4rem);
+      align-items: center;
+    }
+
+    .tile {
+      display: flex;
+      flex-direction: column;
+      min-height: 14rem;
+      padding: 18px 18px 22px;
+      border-radius: 20px;
+      background: var(--tile);
+      box-shadow: inset 0 0 0 1px var(--tile-edge);
+      color: var(--on-tile);
+      text-decoration: none;
+    }
+
+    .tag {
+      align-self: flex-start;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      box-shadow: inset 0 0 0 1px rgba(230, 238, 236, 0.28);
+      color: rgba(230, 238, 236, 0.88);
+      font-size: 0.8125rem;
+      font-weight: 560;
+      line-height: 1;
+    }
+
+    .entry-body h2 {
+      margin: 0;
+      font-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+      font-weight: 620;
+      font-stretch: 108%;
+      letter-spacing: -0.018em;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+
+    .entry-body p {
+      margin: 0.875rem 0 0;
+      max-width: 40ch;
+      color: var(--ink-soft);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 2.75rem;
+      padding: 0 1.15rem;
+      border: 0;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 0.9375rem;
+      font-weight: 580;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-primary { background: var(--btn); color: var(--btn-ink); }
+    .btn-primary:hover { background: var(--btn-hover); }
+
+    .btn-quiet {
+      background: transparent;
+      color: var(--ink);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .btn-quiet:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+
+    .btn .icon { flex: none; width: 1rem; height: 1rem; }
+
+    .no-js [data-share] { display: none; }
+
+    /* Diagrams */
+
+    .diagram {
+      display: block;
+      width: 100%;
+      max-width: 30rem;
+      height: auto;
+      margin: 0.75rem auto 0;
+      overflow: visible;
+    }
+
+    .diagram text {
+      fill: var(--on-tile);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 520;
+      text-anchor: middle;
+    }
+
+    .diagram .core {
+      font-size: 15px;
+      font-weight: 650;
+      font-stretch: 110%;
+    }
+
+    .diagram .track,
+    .diagram .chev {
+      fill: none;
+      stroke: var(--on-tile-soft);
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .diagram .pill rect {
+      fill: var(--tile);
+      stroke: var(--on-tile-soft);
+      stroke-width: 1.25;
+    }
+
+    .diagram .resolved rect {
+      stroke: var(--signal);
+      transition: fill 0.25s ease;
+    }
+    .diagram .resolved text { fill: var(--signal); text-anchor: start; }
+    .diagram .resolved .check {
+      fill: none;
+      stroke: var(--signal);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .diagram .signal {
+      fill: none;
+      stroke: var(--signal);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 6 94;
+      stroke-dashoffset: 100;
+      opacity: 0;
+    }
+
+    .entry:hover .resolved rect,
+    .entry:focus-within .resolved rect {
+      fill: rgba(255, 194, 75, 0.16);
+      transition: fill 0.3s ease 1.35s;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .diagram .draw {
+        stroke-dasharray: 100;
+        animation: draw var(--dur, 1.2s) cubic-bezier(0.45, 0, 0.3, 1) var(--d, 0s) both;
+      }
+
+      .diagram .appear {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: appear 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s) both;
+      }
+
+      .entry:hover .signal,
+      .entry:focus-within .signal {
+        animation: signal-run var(--run, 2.6s) cubic-bezier(0.45, 0.05, 0.3, 1) var(--d, 0s) both;
+      }
+    }
+
+    @keyframes draw {
+      from { stroke-dashoffset: 100; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @keyframes signal-run {
+      0% { stroke-dashoffset: 100; opacity: 0; }
+      8% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 0; }
+    }
+
+    /* Toast */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(1.25rem, env(safe-area-inset-bottom));
+      margin: 0;
+      padding: 0.7rem 1.1rem;
+      border-radius: 999px;
+      background: var(--btn);
+      color: var(--btn-ink);
+      font-size: 0.9375rem;
+      font-weight: 560;
+      line-height: 1.2;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 0.75rem);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .toast { transform: translate(-50%, 0); transition: opacity 0.2s ease; }
+    }
+
+    /* Phones */
+
+    @media (max-width: 47.5rem) {
+      .entry { grid-template-columns: 1fr; gap: 1.25rem; }
+      .tile { min-height: 0; padding: 12px 12px 16px; border-radius: 16px; }
+      .entry-body p { max-width: none; }
+      .actions { margin-top: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="intro">
+      <h1>Zendesk Overview</h1>
+      <p class="lede"><span>Interactive walkthroughs and demos of Zendesk.</span> <span>Open one, or share its link.</span></p>
+    </header>
+
+    <!--
+      To add a presentation: copy one <li class="entry"> block below, then update
+      the two links, the share URL, the tag, the title (and its id), and the text.
+      Replace the <svg> with a new diagram, or delete it for a plain tile.
+    -->
+    <ul class="library" role="list">
+
+      <li class="entry">
+        <a class="tile" href="https://joekit-zd.github.io/ZendeskOverview/zd-rll/index.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <span class="tag">Walkthrough</span>
+          <svg class="diagram" viewBox="0 0 360 280" aria-hidden="true" focusable="false">
+            <path class="track draw" style="--d:.15s" pathLength="100" d="M68 140 A112 112 0 0 1 292 140 A112 112 0 0 1 68 140"/>
+            <path class="signal" pathLength="100" d="M68 140 A112 112 0 0 1 292 140 A112 112 0 0 1 68 140"/>
+            <g class="appear" style="--d:1.25s">
+              <path class="chev" transform="translate(100.8 60.8) rotate(-45)" d="M-3 -5 L3 0 L-3 5"/>
+              <path class="chev" transform="translate(259.2 60.8) rotate(45)" d="M-3 -5 L3 0 L-3 5"/>
+              <path class="chev" transform="translate(259.2 219.2) rotate(135)" d="M-3 -5 L3 0 L-3 5"/>
+              <path class="chev" transform="translate(100.8 219.2) rotate(225)" d="M-3 -5 L3 0 L-3 5"/>
+            </g>
+            <g class="pill appear" style="--d:.1s">
+              <rect x="14" y="125" width="108" height="30" rx="15"/>
+              <text x="68" y="140" dy=".35em">Service data</text>
+            </g>
+            <g class="pill appear" style="--d:.42s">
+              <rect x="119" y="13" width="122" height="30" rx="15"/>
+              <text x="180" y="28" dy=".35em">Quality signals</text>
+            </g>
+            <g class="pill appear" style="--d:.72s">
+              <rect x="234" y="125" width="116" height="30" rx="15"/>
+              <text x="292" y="140" dy=".35em">Agent actions</text>
+            </g>
+            <g class="pill appear" style="--d:1.02s">
+              <rect x="133" y="237" width="94" height="30" rx="15"/>
+              <text x="180" y="252" dy=".35em">Outcomes</text>
+            </g>
+            <text class="core appear" style="--d:1.3s" x="178" y="140" dy=".35em">Zendesk AI</text>
+          </svg>
+        </a>
+        <div class="entry-body">
+          <h2 id="rll-title">Resolution Learning Loop</h2>
+          <p>How Zendesk AI learns from every interaction and uses it to improve the next one.<span class="sr-only"> The diagram shows the loop running through service data, quality signals, agent actions and outcomes.</span></p>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://joekit-zd.github.io/ZendeskOverview/zd-rll/index.html" target="_blank" rel="noopener" aria-describedby="rll-title">
+              Open walkthrough
+              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3.5h7v7M12.5 3.5 4 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
+            <button class="btn btn-quiet" type="button" data-share="https://joekit-zd.github.io/ZendeskOverview/zd-rll/index.html" data-title="Resolution Learning Loop" aria-describedby="rll-title"><span data-share-label>Copy link</span></button>
+          </div>
+        </div>
+      </li>
+
+      <li class="entry">
+        <a class="tile" href="https://joekit-zd.github.io/ZendeskOverview/es-overview/index.html" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <span class="tag">Demo</span>
+          <svg class="diagram" viewBox="0 0 360 280" aria-hidden="true" focusable="false">
+            <path class="track draw" style="--d:.25s; --dur:.55s" pathLength="100" d="M86 140 C114 140 114 60 142 60"/>
+            <path class="track draw" style="--d:.25s; --dur:.55s" pathLength="100" d="M86 140 C114 140 114 220 142 220"/>
+            <path class="track draw" style="--d:.8s; --dur:.5s" pathLength="100" d="M198 60 C223 60 223 140 248 140"/>
+            <path class="track draw" style="--d:.8s; --dur:.5s" pathLength="100" d="M198 220 C223 220 223 140 248 140"/>
+            <path class="signal" style="--run:1.5s" pathLength="100" d="M86 140 C114 140 114 60 142 60 L198 60 C223 60 223 140 248 140"/>
+            <path class="signal" style="--run:1.5s; --d:.45s" pathLength="100" d="M86 140 C114 140 114 220 142 220 L198 220 C223 220 223 140 248 140"/>
+            <g class="pill appear" style="--d:.1s">
+              <rect x="6" y="125" width="80" height="30" rx="15"/>
+              <text x="46" y="140" dy=".35em">Request</text>
+            </g>
+            <g class="pill appear" style="--d:.7s">
+              <rect x="142" y="45" width="56" height="30" rx="15"/>
+              <text x="170" y="60" dy=".35em">IT</text>
+            </g>
+            <g class="pill appear" style="--d:.75s">
+              <rect x="142" y="205" width="56" height="30" rx="15"/>
+              <text x="170" y="220" dy=".35em">HR</text>
+            </g>
+            <g class="pill resolved appear" style="--d:1.25s">
+              <rect x="248" y="125" width="104" height="30" rx="15"/>
+              <path class="check" d="M261 140.5 l3.5 3.5 l6.5 -7"/>
+              <text x="278" y="140" dy=".35em">Resolved</text>
+            </g>
+          </svg>
+        </a>
+        <div class="entry-body">
+          <h2 id="es-title">Employee Service</h2>
+          <p>An overview of Zendesk for employee service, where IT and HR teams resolve employee requests in one place.<span class="sr-only"> The diagram shows an employee request routed to IT or HR, then resolved.</span></p>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://joekit-zd.github.io/ZendeskOverview/es-overview/index.html" target="_blank" rel="noopener" aria-describedby="es-title">
+              Open demo
+              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 3.5h7v7M12.5 3.5 4 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
+            <button class="btn btn-quiet" type="button" data-share="https://joekit-zd.github.io/ZendeskOverview/es-overview/index.html" data-title="Employee Service" aria-describedby="es-title"><span data-share-label>Copy link</span></button>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </main>
+
+  <p class="toast" role="status" aria-live="polite"></p>
+
+  <script>
+    (function () {
+      var toast = document.querySelector('.toast');
+      var timer;
+
+      function show(message) {
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 2200);
+      }
+
+      function copy(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return legacyCopy(text); });
+        }
+        return Promise.resolve(legacyCopy(text));
+      }
+
+      function legacyCopy(text) {
+        var area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        area.remove();
+        return ok;
+      }
+
+      // Phones and tablets get the native share sheet; everything else copies the link.
+      var useShareSheet = typeof navigator.share === 'function' && window.matchMedia('(pointer: coarse)').matches;
+
+      document.querySelectorAll('[data-share]').forEach(function (button) {
+        var label = button.querySelector('[data-share-label]');
+        if (useShareSheet && label) label.textContent = 'Share';
+
+        button.addEventListener('click', function () {
+          var url = button.getAttribute('data-share');
+          var title = button.getAttribute('data-title');
+
+          function copyAndConfirm() {
+            copy(url).then(function (ok) {
+              if (ok) show('Link copied');
+              else window.prompt('Copy this link:', url);
+            });
+          }
+
+          if (useShareSheet) {
+            navigator.share({ title: title, url: url }).catch(function (error) {
+              if (error && error.name !== 'AbortError') copyAndConfirm();
+            });
+          } else {
+            copyAndConfirm();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
